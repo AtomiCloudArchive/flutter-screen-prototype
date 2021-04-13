@@ -16,7 +16,7 @@ class CustomCard extends StatelessWidget {
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.all(Radius.circular(10.0)),
-        boxShadow: <BoxShadow>[
+        boxShadow: [
           BoxShadow(
             offset: Offset(5, 5),
             blurRadius: 10.0,

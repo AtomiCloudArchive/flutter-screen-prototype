@@ -5,16 +5,22 @@ class SearchScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Second Route"),
-      ),
-      body: Center(
-        child: ElevatedButton(
-          onPressed: () {
-            Navigator.pop(context);
-          },
-          child: Text('Go back!'),
+        title: Container(
+          margin:
+              EdgeInsets.only(right: 56.0), //Default width for leading button
+          child: Center(
+            child: Text("Explore"),
+          ),
         ),
       ),
+      body: SearchBody(),
     );
+  }
+}
+
+class SearchBody extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Column();
   }
 }

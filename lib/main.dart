@@ -19,6 +19,7 @@ class MyApp extends StatelessWidget {
       body: customBody(context),
       drawer: customDrawer(context),
       endDrawer: customEndDrawer(context),
+      floatingActionButton: serverButton(context),
     );
   }
 
@@ -37,11 +38,11 @@ class MyApp extends StatelessWidget {
           );
         },
       ),
-      actions: <Widget>[
+      actions: [
         Center(
           child: TextButton(
             style: TextButton.styleFrom(
-              primary: Colors.white, // foreground
+              primary: Colors.white,
             ),
             onPressed: () {},
             child: Text('Options'),
@@ -71,7 +72,7 @@ class MyApp extends StatelessWidget {
     return Padding(
         padding: EdgeInsets.all(25.0),
         child: Column(
-          children: <Widget>[
+          children: [
             CustomCard(child: Text("Hot reload supported")),
             CustomCard(child: Text("Somethings missing...")),
           ],
@@ -83,26 +84,61 @@ class MyApp extends StatelessWidget {
   }
 
   Widget customEndDrawer(BuildContext context) {
-    return Drawer(
-      child: Column(
-        children: <Widget>[
-          ColoredBox(
-            child: SizedBox(
-              height: 50,
-              child: Row(
-                children: <Widget>[
-                  IconButton(
-                    icon: Icon(Icons.desktop_windows),
-                    onPressed: () => {},
-                  ),
-                  Text("Server"),
-                  Icon(Icons.bolt),
-                ],
-              ),
+    return Drawer();
+  }
+
+  Widget serverButton(BuildContext context) {
+    return Builder(
+      builder: (BuildContext context) {
+        return FloatingActionButton(
+          child: Icon(Icons.bolt),
+          onPressed: () {
+            Navigator.of(context).push(MaterialPageRoute(
+              builder: (context) => ServerScreen(),
+            ));
+          },
+          tooltip: MaterialLocalizations.of(context).openAppDrawerTooltip,
+        );
+      },
+    );
+  }
+}
+
+class ServerScreen extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: Center(child: Text("Servers"))),
+      body: Center(
+        child: Column(
+          children: [
+            serverBox(context),
+            serverBox(context),
+            serverBox(context),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget serverBox(BuildContext context) {
+    return Container(
+      margin: EdgeInsets.all(5.0),
+      child: Center(
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            IconButton(
+              icon: Icon(Icons.desktop_windows),
+              onPressed: () => {},
             ),
-            color: Colors.lightBlue,
-          ),
-        ],
+            Text("Server"),
+            Icon(Icons.bolt),
+          ],
+        ),
+      ),
+      decoration: BoxDecoration(
+        color: Colors.yellow,
       ),
     );
   }
