@@ -11,15 +11,64 @@ void main() {
   ));
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
+  @override
+  _MyAppState createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> with SingleTickerProviderStateMixin {
+  AnimationController _animationController;
+
+  @override
+  void initState() {
+    super.initState();
+    _animationController =
+        AnimationController(vsync: this, duration: Duration(milliseconds: 300));
+  }
+
+  @override
+  void dispose() {
+    _animationController.dispose();
+    super.dispose();
+  }
+
+  _toggleAnimation() {
+    _animationController.isDismissed
+        ? _animationController.forward()
+        : _animationController.reverse();
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: customAppBar(context),
-      body: customBody(context),
-      drawer: customDrawer(context),
-      endDrawer: customEndDrawer(context),
-      floatingActionButton: serverButton(context),
+    final leftSlide = MediaQuery.of(context).size.width * -0.8;
+    final drawerOffset = MediaQuery.of(context).size.width;
+    return AnimatedBuilder(
+      animation: _animationController,
+      builder: (context, child) {
+        double slide = leftSlide * _animationController.value;
+
+        return Stack(
+          children: [
+            Transform(
+              transform: Matrix4.identity()..translate(slide),
+              alignment: Alignment.center,
+              child: Transform.translate(
+                offset: Offset(drawerOffset, 0),
+                child: customEndDrawer(context),
+              ),
+            ),
+            Transform(
+              transform: Matrix4.identity()..translate(slide),
+              alignment: Alignment.center,
+              child: Scaffold(
+                appBar: customAppBar(context),
+                body: customBody(context),
+                floatingActionButton: serverButton(context),
+              ),
+            ),
+          ],
+        );
+      },
     );
   }
 
@@ -38,8 +87,9 @@ class MyApp extends StatelessWidget {
           );
         },
       ),
-      actions: [
-        Center(
+      title: Container(
+        margin: EdgeInsets.only(left: 24.0),
+        child: Center(
           child: TextButton(
             style: TextButton.styleFrom(
               primary: Colors.white,
@@ -47,8 +97,9 @@ class MyApp extends StatelessWidget {
             onPressed: () {},
             child: Text('Options'),
           ),
-          widthFactor: 2.5,
         ),
+      ),
+      actions: [
         IconButton(
           icon: Icon(Icons.notifications),
           onPressed: () => {},
@@ -57,9 +108,7 @@ class MyApp extends StatelessWidget {
           builder: (BuildContext context) {
             return IconButton(
               icon: Icon(Icons.account_circle),
-              onPressed: () {
-                Scaffold.of(context).openEndDrawer();
-              },
+              onPressed: () => _toggleAnimation(),
               tooltip: MaterialLocalizations.of(context).openAppDrawerTooltip,
             );
           },
@@ -84,7 +133,7 @@ class MyApp extends StatelessWidget {
   }
 
   Widget customEndDrawer(BuildContext context) {
-    return Drawer();
+    return Drawer(child: Text("ASD"));
   }
 
   Widget serverButton(BuildContext context) {
