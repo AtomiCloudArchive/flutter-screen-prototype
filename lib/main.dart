@@ -2,7 +2,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import 'card.dart';
+import 'notif_screen.dart';
 import 'search_screen.dart';
+import 'server_screen.dart';
 
 void main() {
   runApp(MaterialApp(
@@ -10,6 +12,9 @@ void main() {
     home: MyApp(),
   ));
 }
+
+final Color bkgdColor = Colors.orange[50];
+final Color textColor = Colors.black;
 
 class MyApp extends StatefulWidget {
   @override
@@ -40,7 +45,7 @@ class _MyAppState extends State<MyApp> with SingleTickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    final leftSlide = MediaQuery.of(context).size.width * -0.8;
+    final leftSlide = -304.0; //Drawer width
     final drawerOffset = MediaQuery.of(context).size.width;
     return AnimatedBuilder(
       animation: _animationController,
@@ -61,6 +66,7 @@ class _MyAppState extends State<MyApp> with SingleTickerProviderStateMixin {
               transform: Matrix4.identity()..translate(slide),
               alignment: Alignment.center,
               child: Scaffold(
+                backgroundColor: bkgdColor,
                 appBar: customAppBar(context),
                 body: customBody(context),
                 floatingActionButton: serverButton(context),
@@ -74,43 +80,39 @@ class _MyAppState extends State<MyApp> with SingleTickerProviderStateMixin {
 
   Widget customAppBar(BuildContext context) {
     return AppBar(
-      leading: Builder(
+      backgroundColor: bkgdColor,
+      elevation: 0.0,
+      leading: routeIconButton(Icons.search,
+          MaterialPageRoute(builder: (context) => SearchScreen())),
+      title: Builder(
         builder: (BuildContext context) {
-          return IconButton(
-            icon: Icon(Icons.search),
-            onPressed: () {
-              Navigator.of(context).push(MaterialPageRoute(
-                builder: (context) => SearchScreen(),
-              ));
-            },
-            tooltip: MaterialLocalizations.of(context).openAppDrawerTooltip,
+          return Container(
+            margin: EdgeInsets.only(left: 24.0),
+            child: Center(
+              child: TextButton(
+                style: TextButton.styleFrom(
+                  primary: textColor,
+                ),
+                onPressed: () {
+                  Navigator.of(context).push(MaterialPageRoute(
+                    builder: (context) => BlankScreen(), //TODO
+                  ));
+                },
+                child: Text('Options'),
+              ),
+            ),
           );
         },
       ),
-      title: Container(
-        margin: EdgeInsets.only(left: 24.0),
-        child: Center(
-          child: TextButton(
-            style: TextButton.styleFrom(
-              primary: Colors.white,
-            ),
-            onPressed: () {},
-            child: Text('Options'),
-          ),
-        ),
-      ),
       actions: [
-        IconButton(
-          icon: Icon(Icons.notifications),
-          onPressed: () => {},
+        routeIconButton(
+          Icons.notifications,
+          MaterialPageRoute(builder: (context) => NotifScreen()),
         ),
-        Builder(
-          builder: (BuildContext context) {
-            return IconButton(
-              icon: Icon(Icons.account_circle),
-              onPressed: () => _toggleAnimation(),
-              tooltip: MaterialLocalizations.of(context).openAppDrawerTooltip,
-            );
+        IconButton(
+          icon: Icon(Icons.account_circle, color: textColor),
+          onPressed: () {
+            _toggleAnimation();
           },
         ),
       ],
@@ -133,14 +135,47 @@ class _MyAppState extends State<MyApp> with SingleTickerProviderStateMixin {
   }
 
   Widget customEndDrawer(BuildContext context) {
-    return Drawer(child: Text("ASD"));
+    return Drawer(
+      child: Container(
+        color: Colors.orange[50],
+        child: Column(
+          children: [
+            customProfileCard(Text("Test Account 1")),
+            customProfileCard(Text("Test Account 2")),
+            customProfileCard(Text("Test Account 3")),
+            customProfileCard(Text("Test Account 4")),
+            customProfileCard(Text("Test Account 5")),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget customProfileCard(Widget text) {
+    return Container(
+      margin: EdgeInsets.all(8.0),
+      padding: EdgeInsets.all(8.0),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Icon(Icons.account_box_rounded),
+          Center(child: text),
+          Icon(Icons.circle),
+        ],
+      ),
+      decoration: BoxDecoration(
+        border: Border.all(),
+      ),
+    );
   }
 
   Widget serverButton(BuildContext context) {
     return Builder(
       builder: (BuildContext context) {
         return FloatingActionButton(
-          child: Icon(Icons.bolt),
+          backgroundColor: Colors.green,
+          elevation: 0.0,
+          child: Icon(Icons.bolt, color: Colors.yellow),
           onPressed: () {
             Navigator.of(context).push(MaterialPageRoute(
               builder: (context) => ServerScreen(),
@@ -151,44 +186,26 @@ class _MyAppState extends State<MyApp> with SingleTickerProviderStateMixin {
       },
     );
   }
+
+  Widget routeIconButton(IconData icon, MaterialPageRoute route) {
+    return Builder(
+      builder: (BuildContext context) {
+        return IconButton(
+          icon: Icon(icon, color: textColor),
+          onPressed: () {
+            Navigator.of(context).push(route);
+          },
+        );
+      },
+    );
+  }
 }
 
-class ServerScreen extends StatelessWidget {
+class BlankScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Center(child: Text("Servers"))),
-      body: Center(
-        child: Column(
-          children: [
-            serverBox(context),
-            serverBox(context),
-            serverBox(context),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget serverBox(BuildContext context) {
-    return Container(
-      margin: EdgeInsets.all(5.0),
-      child: Center(
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            IconButton(
-              icon: Icon(Icons.desktop_windows),
-              onPressed: () => {},
-            ),
-            Text("Server"),
-            Icon(Icons.bolt),
-          ],
-        ),
-      ),
-      decoration: BoxDecoration(
-        color: Colors.yellow,
-      ),
+      appBar: AppBar(),
     );
   }
 }
