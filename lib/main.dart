@@ -95,7 +95,7 @@ class _MyAppState extends State<MyApp> with SingleTickerProviderStateMixin {
                 ),
                 onPressed: () {
                   Navigator.of(context).push(MaterialPageRoute(
-                    builder: (context) => BlankScreen(), //TODO
+                    builder: (context) => BlankScreen(),
                   ));
                 },
                 child: Text('Options'),
