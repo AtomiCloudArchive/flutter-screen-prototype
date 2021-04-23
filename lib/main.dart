@@ -5,16 +5,21 @@ import 'card.dart';
 import 'notif_screen.dart';
 import 'search_screen.dart';
 import 'server_screen.dart';
+import 'themed_screen.dart';
+
+final Color bkgdColor = Colors.orange.shade50;
+final Color textColor = Colors.black;
 
 void main() {
   runApp(MaterialApp(
+    theme: ThemeData(
+      backgroundColor: bkgdColor,
+      primaryColor: textColor,
+    ),
     title: 'Navigation Basics',
     home: MyApp(),
   ));
 }
-
-final Color bkgdColor = Colors.orange[50];
-final Color textColor = Colors.black;
 
 class MyApp extends StatefulWidget {
   @override
@@ -22,7 +27,7 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> with SingleTickerProviderStateMixin {
-  AnimationController _animationController;
+  late AnimationController _animationController;
 
   @override
   void initState() {
@@ -37,7 +42,7 @@ class _MyAppState extends State<MyApp> with SingleTickerProviderStateMixin {
     super.dispose();
   }
 
-  _toggleAnimation() {
+  _toggleDrawerAnimation() {
     _animationController.isDismissed
         ? _animationController.forward()
         : _animationController.reverse();
@@ -59,28 +64,66 @@ class _MyAppState extends State<MyApp> with SingleTickerProviderStateMixin {
               alignment: Alignment.center,
               child: Transform.translate(
                 offset: Offset(drawerOffset, 0),
-                child: customEndDrawer(context),
+                child: customEndDrawer(),
               ),
             ),
             Transform(
-              transform: Matrix4.identity()..translate(slide),
-              alignment: Alignment.center,
-              child: Scaffold(
-                backgroundColor: bkgdColor,
+                transform: Matrix4.identity()..translate(slide),
+                alignment: Alignment.center,
+                child: ThemedScreen(
+                  appBarLeading: routeIconButton(Icons.search,
+                      MaterialPageRoute(builder: (context) => SearchScreen())),
+                  appBarTitle: Builder(
+                    builder: (BuildContext context) {
+                      return Container(
+                        margin: EdgeInsets.only(left: 24.0),
+                        child: Center(
+                          child: TextButton(
+                            style: TextButton.styleFrom(
+                              primary: Colors.black,
+                            ),
+                            onPressed: () {
+                              Navigator.of(context).push(MaterialPageRoute(
+                                builder: (context) => ThemedScreen(),
+                              ));
+                            },
+                            child: Text('Options'),
+                          ),
+                        ),
+                      );
+                    },
+                  ),
+                  appBarActions: [
+                    routeIconButton(
+                      Icons.notifications,
+                      MaterialPageRoute(builder: (context) => NotifScreen()),
+                    ),
+                    IconButton(
+                      icon: Icon(Icons.account_circle), //color: textColor),
+                      onPressed: () {
+                        _toggleDrawerAnimation();
+                      },
+                    ),
+                  ],
+                  body: customBody(),
+                  floatingActionButton: serverButton(),
+                )
+                /*
+              Scaffold(
                 appBar: customAppBar(context),
                 body: customBody(context),
                 floatingActionButton: serverButton(context),
               ),
-            ),
+              */
+                ),
           ],
         );
       },
     );
   }
 
-  Widget customAppBar(BuildContext context) {
+  PreferredSizeWidget customAppBar() {
     return AppBar(
-      backgroundColor: bkgdColor,
       elevation: 0.0,
       leading: routeIconButton(Icons.search,
           MaterialPageRoute(builder: (context) => SearchScreen())),
@@ -91,11 +134,11 @@ class _MyAppState extends State<MyApp> with SingleTickerProviderStateMixin {
             child: Center(
               child: TextButton(
                 style: TextButton.styleFrom(
-                  primary: textColor,
+                  primary: Theme.of(context).primaryColor,
                 ),
                 onPressed: () {
                   Navigator.of(context).push(MaterialPageRoute(
-                    builder: (context) => BlankScreen(),
+                    builder: (context) => ThemedScreen(),
                   ));
                 },
                 child: Text('Options'),
@@ -110,16 +153,16 @@ class _MyAppState extends State<MyApp> with SingleTickerProviderStateMixin {
           MaterialPageRoute(builder: (context) => NotifScreen()),
         ),
         IconButton(
-          icon: Icon(Icons.account_circle, color: textColor),
+          icon: Icon(Icons.account_circle), //color: textColor),
           onPressed: () {
-            _toggleAnimation();
+            _toggleDrawerAnimation();
           },
         ),
       ],
     );
   }
 
-  Widget customBody(BuildContext context) {
+  Widget customBody() {
     return Padding(
         padding: EdgeInsets.all(25.0),
         child: Column(
@@ -130,11 +173,11 @@ class _MyAppState extends State<MyApp> with SingleTickerProviderStateMixin {
         ));
   }
 
-  Widget customDrawer(BuildContext context) {
+  Widget customDrawer() {
     return Drawer();
   }
 
-  Widget customEndDrawer(BuildContext context) {
+  Widget customEndDrawer() {
     return Drawer(
       child: Container(
         color: Colors.orange[50],
@@ -169,7 +212,7 @@ class _MyAppState extends State<MyApp> with SingleTickerProviderStateMixin {
     );
   }
 
-  Widget serverButton(BuildContext context) {
+  Widget serverButton() {
     return Builder(
       builder: (BuildContext context) {
         return FloatingActionButton(
@@ -191,21 +234,12 @@ class _MyAppState extends State<MyApp> with SingleTickerProviderStateMixin {
     return Builder(
       builder: (BuildContext context) {
         return IconButton(
-          icon: Icon(icon, color: textColor),
+          icon: Icon(icon), //color: textColor),
           onPressed: () {
             Navigator.of(context).push(route);
           },
         );
       },
-    );
-  }
-}
-
-class BlankScreen extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(),
     );
   }
 }

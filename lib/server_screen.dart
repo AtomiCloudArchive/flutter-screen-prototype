@@ -1,10 +1,17 @@
 import 'package:flutter/material.dart';
 
+import 'themed_screen.dart';
+
 class ServerScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: Center(child: Text("Servers"))),
+    return ThemedScreen(
+      appBarTitle: Container(
+        margin: EdgeInsets.only(right: 56.0),
+        child: Center(
+          child: Text("Servers", style: TextStyle(color: Colors.black)),
+        ),
+      ),
       body: Center(
         child: Column(
           children: [
