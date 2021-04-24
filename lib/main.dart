@@ -17,8 +17,21 @@ void main() {
       primaryColor: textColor,
     ),
     title: 'Navigation Basics',
-    home: MyApp(),
+    home: LoginScreen(),
   ));
+}
+
+class LoginScreen extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return ThemedScreen(
+      floatingActionButton: IconButton(
+        icon: Icon(Icons.ac_unit),
+        onPressed: () => Navigator.of(context)
+            .push(MaterialPageRoute(builder: (context) => MyApp())),
+      ),
+    );
+  }
 }
 
 class MyApp extends StatefulWidget {
@@ -68,54 +81,54 @@ class _MyAppState extends State<MyApp> with SingleTickerProviderStateMixin {
               ),
             ),
             Transform(
-                transform: Matrix4.identity()..translate(slide),
-                alignment: Alignment.center,
-                child: ThemedScreen(
-                  appBarLeading: routeIconButton(Icons.search,
-                      MaterialPageRoute(builder: (context) => SearchScreen())),
-                  appBarTitle: Builder(
-                    builder: (BuildContext context) {
-                      return Container(
-                        margin: EdgeInsets.only(left: 24.0),
-                        child: Center(
-                          child: TextButton(
-                            style: TextButton.styleFrom(
-                              primary: Colors.black,
-                            ),
-                            onPressed: () {
-                              Navigator.of(context).push(MaterialPageRoute(
-                                builder: (context) => ThemedScreen(),
-                              ));
-                            },
-                            child: Text('Options'),
+              transform: Matrix4.identity()..translate(slide),
+              alignment: Alignment.center,
+              child: ThemedScreen(
+                appBarLeading: routeIconButton(Icons.search,
+                    MaterialPageRoute(builder: (context) => SearchScreen())),
+                appBarTitle: Builder(
+                  builder: (BuildContext context) {
+                    return Container(
+                      margin: EdgeInsets.only(left: 24.0),
+                      child: Center(
+                        child: TextButton(
+                          style: TextButton.styleFrom(
+                            primary: Colors.black,
                           ),
+                          onPressed: () {
+                            Navigator.of(context).push(MaterialPageRoute(
+                              builder: (context) => ThemedScreen(),
+                            ));
+                          },
+                          child: Text('Options'),
                         ),
-                      );
+                      ),
+                    );
+                  },
+                ),
+                appBarActions: [
+                  routeIconButton(
+                    Icons.notifications,
+                    MaterialPageRoute(builder: (context) => NotifScreen()),
+                  ),
+                  IconButton(
+                    icon: Icon(Icons.account_circle), //color: textColor),
+                    onPressed: () {
+                      _toggleDrawerAnimation();
                     },
                   ),
-                  appBarActions: [
-                    routeIconButton(
-                      Icons.notifications,
-                      MaterialPageRoute(builder: (context) => NotifScreen()),
-                    ),
-                    IconButton(
-                      icon: Icon(Icons.account_circle), //color: textColor),
-                      onPressed: () {
-                        _toggleDrawerAnimation();
-                      },
-                    ),
-                  ],
-                  body: customBody(),
-                  floatingActionButton: serverButton(),
-                )
-                /*
+                ],
+                body: customBody(),
+                floatingActionButton: serverButton(),
+              ),
+              /*
               Scaffold(
                 appBar: customAppBar(context),
                 body: customBody(context),
                 floatingActionButton: serverButton(context),
               ),
               */
-                ),
+            ),
           ],
         );
       },

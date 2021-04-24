@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:vector_math/vector_math_64.dart' as VecMath;
 
 import 'themed_screen.dart';
 
@@ -17,25 +18,64 @@ class SearchScreen extends StatelessWidget {
   }
 }
 
-class SearchBody extends StatelessWidget {
+class SearchBody extends StatefulWidget {
+  @override
+  _SearchBodyState createState() => _SearchBodyState();
+}
+
+class _SearchBodyState extends State<SearchBody>
+    with SingleTickerProviderStateMixin {
+  late AnimationController _animationController;
+
+  @override
+  void initState() {
+    super.initState();
+    _animationController =
+        AnimationController(vsync: this, duration: Duration(milliseconds: 300));
+  }
+
+  @override
+  void dispose() {
+    _animationController.dispose();
+    super.dispose();
+  }
+
+  _toggleInfoAnimation() {
+    _animationController.isDismissed
+        ? _animationController.forward()
+        : _animationController.reverse();
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Transform.translate(
-      offset: Offset(0.0, -300.0),
-      child: Column(
-        children: [
-          Container(
-            height: 300.0,
-            decoration: BoxDecoration(
-              color: Colors.blue,
+    final double infoBoxSize = 300.0; //InfoBox Height
+    return AnimatedBuilder(
+      animation: _animationController,
+      builder: (context, child) {
+        double slide = infoBoxSize * _animationController.value;
+        VecMath.Vector3 down = VecMath.Vector3(0.0, 1.0, 0.0);
+
+        return Transform(
+          transform: Matrix4.identity()..translate(down * slide),
+          child: Transform.translate(
+            offset: Offset(0.0, -infoBoxSize),
+            child: Column(
+              children: [
+                Container(
+                  height: infoBoxSize,
+                  decoration: BoxDecoration(
+                    color: Colors.blue,
+                  ),
+                ),
+                infoBox("Server Type A"),
+                infoBox("Server Type A"),
+                infoBox("Server Type A"),
+                infoBox("Server Type A"),
+              ],
             ),
           ),
-          infoBox("Server Type A"),
-          infoBox("Server Type A"),
-          infoBox("Server Type A"),
-          infoBox("Server Type A"),
-        ],
-      ),
+        );
+      },
     );
   }
 
@@ -64,7 +104,7 @@ class SearchBody extends StatelessWidget {
             ],
           ),
         ),
-        onPressed: () => {},
+        onPressed: () => _toggleInfoAnimation(),
       ),
     );
   }
