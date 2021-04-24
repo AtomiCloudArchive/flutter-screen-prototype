@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'dart:math';
 import 'package:vector_math/vector_math_64.dart' as VecMath;
 
 import 'card.dart';

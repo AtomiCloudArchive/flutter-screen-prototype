@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'card.dart';
 import 'notif_screen.dart';
 import 'search_screen.dart';
-import 'server_screen.dart';
+import 'profile_screen.dart';
 import 'diamond_styles.dart';
 import 'themed_screen.dart';
 
@@ -78,26 +78,38 @@ class _MyAppState extends State<MyApp> with SingleTickerProviderStateMixin {
               transform: Matrix4.identity()..translate(slide),
               alignment: Alignment.center,
               child: ThemedScreen(
-                appBarLeading: routeIconButton(Icons.search,
-                    MaterialPageRoute(builder: (context) => SearchScreen())),
+                appBarLeading: AbsorbPointer(
+                  // disables button when drawer is active
+                  absorbing: _animationController.isCompleted,
+                  child: routeIconButton(
+                    Icons.search,
+                    MaterialPageRoute(
+                      builder: (context) => SearchScreen(),
+                    ),
+                  ),
+                ),
                 appBarTitle: Builder(
                   builder: (BuildContext context) {
                     return Container(
                       margin: EdgeInsets.only(left: 24.0),
                       child: Center(
-                        child: TextButton(
-                          style: TextButton.styleFrom(
-                            primary: ThemeColors.black,
-                          ),
-                          onPressed: () {
-                            Navigator.of(context).push(MaterialPageRoute(
-                              builder: (context) => ThemedScreen(),
-                            ));
-                          },
-                          child: Text(
-                            'Options',
-                            style: TextStyle(
-                                fontFamily: DiamondTypography.regularFont),
+                        child: AbsorbPointer(
+                          // disables button when drawer is active
+                          absorbing: _animationController.isCompleted,
+                          child: TextButton(
+                            style: TextButton.styleFrom(
+                              primary: ThemeColors.black,
+                            ),
+                            onPressed: () {
+                              Navigator.of(context).push(MaterialPageRoute(
+                                builder: (context) => ThemedScreen(),
+                              ));
+                            },
+                            child: Text(
+                              'Teams',
+                              style: TextStyle(
+                                  fontFamily: DiamondTypography.regularFont),
+                            ),
                           ),
                         ),
                       ),
@@ -105,12 +117,16 @@ class _MyAppState extends State<MyApp> with SingleTickerProviderStateMixin {
                   },
                 ),
                 appBarActions: [
-                  routeIconButton(
-                    Icons.notifications,
-                    MaterialPageRoute(builder: (context) => NotifScreen()),
+                  AbsorbPointer(
+                    // disables button when drawer is active
+                    absorbing: _animationController.isCompleted,
+                    child: routeIconButton(
+                      Icons.notifications,
+                      MaterialPageRoute(builder: (context) => NotifScreen()),
+                    ),
                   ),
                   IconButton(
-                    icon: Icon(Icons.account_circle),
+                    icon: Icon(Icons.bolt),
                     onPressed: () {
                       _toggleDrawerAnimation();
                     },
@@ -149,7 +165,7 @@ class _MyAppState extends State<MyApp> with SingleTickerProviderStateMixin {
                     builder: (context) => ThemedScreen(),
                   ));
                 },
-                child: Text('Options'),
+                child: Text('Organisations'),
               ),
             ),
           );
@@ -193,33 +209,37 @@ class _MyAppState extends State<MyApp> with SingleTickerProviderStateMixin {
     return Drawer(
       child: Container(
         color: ThemeColors.primaryLight,
-        child: Column(
-          children: [
-            customProfileCard(Text("Test Account 1")),
-            customProfileCard(Text("Test Account 2")),
-            customProfileCard(Text("Test Account 3")),
-            customProfileCard(Text("Test Account 4")),
-            customProfileCard(Text("Test Account 5")),
-          ],
+        child: Center(
+          child: Column(
+            children: [
+              serverBox(context),
+              serverBox(context),
+              serverBox(context),
+            ],
+          ),
         ),
       ),
     );
   }
 
-  Widget customProfileCard(Widget text) {
+  Widget serverBox(BuildContext context) {
     return Container(
-      margin: EdgeInsets.all(8.0),
-      padding: EdgeInsets.all(8.0),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Icon(Icons.account_box_rounded),
-          Center(child: text),
-          Icon(Icons.circle),
-        ],
+      margin: EdgeInsets.all(5.0),
+      child: Center(
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            IconButton(
+              icon: Icon(Icons.desktop_windows),
+              onPressed: () => {},
+            ),
+            Text("Server"),
+            Icon(Icons.bolt),
+          ],
+        ),
       ),
       decoration: BoxDecoration(
-        border: Border.all(),
+        color: ThemeColors.primary,
       ),
     );
   }
@@ -230,10 +250,10 @@ class _MyAppState extends State<MyApp> with SingleTickerProviderStateMixin {
         return FloatingActionButton(
           backgroundColor: ThemeColors.primary,
           elevation: 0.0,
-          child: Icon(Icons.bolt, color: ThemeColors.greyLight),
+          child: Icon(Icons.account_circle, color: ThemeColors.greyLight),
           onPressed: () {
             Navigator.of(context).push(MaterialPageRoute(
-              builder: (context) => ServerScreen(),
+              builder: (context) => ProfileScreen(),
             ));
           },
           tooltip: MaterialLocalizations.of(context).openAppDrawerTooltip,
