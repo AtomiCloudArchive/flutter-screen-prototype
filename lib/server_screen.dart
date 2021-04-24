@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import 'diamond_styles.dart';
 import 'themed_screen.dart';
 
 class ServerScreen extends StatelessWidget {
@@ -9,7 +10,7 @@ class ServerScreen extends StatelessWidget {
       appBarTitle: Container(
         margin: EdgeInsets.only(right: 56.0),
         child: Center(
-          child: Text("Servers", style: TextStyle(color: Colors.black)),
+          child: Text("Servers", style: TextStyle(color: ThemeColors.black)),
         ),
       ),
       body: Center(
@@ -41,7 +42,7 @@ class ServerScreen extends StatelessWidget {
         ),
       ),
       decoration: BoxDecoration(
-        color: Colors.yellow,
+        color: ThemeColors.primary,
       ),
     );
   }

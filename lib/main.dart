@@ -5,17 +5,11 @@ import 'card.dart';
 import 'notif_screen.dart';
 import 'search_screen.dart';
 import 'server_screen.dart';
+import 'diamond_styles.dart';
 import 'themed_screen.dart';
-
-final Color bkgdColor = Colors.orange.shade50;
-final Color textColor = Colors.black;
 
 void main() {
   runApp(MaterialApp(
-    theme: ThemeData(
-      backgroundColor: bkgdColor,
-      primaryColor: textColor,
-    ),
     title: 'Navigation Basics',
     home: LoginScreen(),
   ));
@@ -93,14 +87,18 @@ class _MyAppState extends State<MyApp> with SingleTickerProviderStateMixin {
                       child: Center(
                         child: TextButton(
                           style: TextButton.styleFrom(
-                            primary: Colors.black,
+                            primary: ThemeColors.black,
                           ),
                           onPressed: () {
                             Navigator.of(context).push(MaterialPageRoute(
                               builder: (context) => ThemedScreen(),
                             ));
                           },
-                          child: Text('Options'),
+                          child: Text(
+                            'Options',
+                            style: TextStyle(
+                                fontFamily: DiamondTypography.regularFont),
+                          ),
                         ),
                       ),
                     );
@@ -112,22 +110,19 @@ class _MyAppState extends State<MyApp> with SingleTickerProviderStateMixin {
                     MaterialPageRoute(builder: (context) => NotifScreen()),
                   ),
                   IconButton(
-                    icon: Icon(Icons.account_circle), //color: textColor),
+                    icon: Icon(Icons.account_circle),
                     onPressed: () {
                       _toggleDrawerAnimation();
                     },
                   ),
                 ],
                 body: customBody(),
-                floatingActionButton: serverButton(),
+                floatingActionButton: AbsorbPointer(
+                  // disables button when drawer is active
+                  absorbing: _animationController.isCompleted,
+                  child: serverButton(),
+                ),
               ),
-              /*
-              Scaffold(
-                appBar: customAppBar(context),
-                body: customBody(context),
-                floatingActionButton: serverButton(context),
-              ),
-              */
             ),
           ],
         );
@@ -166,7 +161,7 @@ class _MyAppState extends State<MyApp> with SingleTickerProviderStateMixin {
           MaterialPageRoute(builder: (context) => NotifScreen()),
         ),
         IconButton(
-          icon: Icon(Icons.account_circle), //color: textColor),
+          icon: Icon(Icons.account_circle),
           onPressed: () {
             _toggleDrawerAnimation();
           },
@@ -180,20 +175,24 @@ class _MyAppState extends State<MyApp> with SingleTickerProviderStateMixin {
         padding: EdgeInsets.all(25.0),
         child: Column(
           children: [
-            CustomCard(child: Text("Hot reload supported")),
-            CustomCard(child: Text("Somethings missing...")),
+            Expanded(
+              child: CustomCard(
+                child: Text("Hot reload supported"),
+              ),
+            ),
+            Expanded(
+              child: CustomCard(
+                child: Text("Somethings missing..."),
+              ),
+            ),
           ],
         ));
-  }
-
-  Widget customDrawer() {
-    return Drawer();
   }
 
   Widget customEndDrawer() {
     return Drawer(
       child: Container(
-        color: Colors.orange[50],
+        color: ThemeColors.primaryLight,
         child: Column(
           children: [
             customProfileCard(Text("Test Account 1")),
@@ -229,9 +228,9 @@ class _MyAppState extends State<MyApp> with SingleTickerProviderStateMixin {
     return Builder(
       builder: (BuildContext context) {
         return FloatingActionButton(
-          backgroundColor: Colors.green,
+          backgroundColor: ThemeColors.primary,
           elevation: 0.0,
-          child: Icon(Icons.bolt, color: Colors.yellow),
+          child: Icon(Icons.bolt, color: ThemeColors.greyLight),
           onPressed: () {
             Navigator.of(context).push(MaterialPageRoute(
               builder: (context) => ServerScreen(),
@@ -247,7 +246,7 @@ class _MyAppState extends State<MyApp> with SingleTickerProviderStateMixin {
     return Builder(
       builder: (BuildContext context) {
         return IconButton(
-          icon: Icon(icon), //color: textColor),
+          icon: Icon(icon),
           onPressed: () {
             Navigator.of(context).push(route);
           },

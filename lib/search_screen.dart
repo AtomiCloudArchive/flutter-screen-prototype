@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'dart:math';
 import 'package:vector_math/vector_math_64.dart' as VecMath;
 
+import 'card.dart';
+import 'diamond_styles.dart';
 import 'themed_screen.dart';
 
 class SearchScreen extends StatelessWidget {
@@ -10,7 +13,7 @@ class SearchScreen extends StatelessWidget {
       appBarTitle: Container(
         margin: EdgeInsets.only(right: 56.0), //Default width for leading button
         child: Center(
-          child: Text("Explore", style: TextStyle(color: Colors.black)),
+          child: Text("Explore", style: TextStyle(color: ThemeColors.black)),
         ),
       ),
       body: SearchBody(),
@@ -25,6 +28,9 @@ class SearchBody extends StatefulWidget {
 
 class _SearchBodyState extends State<SearchBody>
     with SingleTickerProviderStateMixin {
+  final double compareBoxSize = 300.0;
+  String a = "TBD";
+  String b = "TBD";
   late AnimationController _animationController;
 
   @override
@@ -46,36 +52,61 @@ class _SearchBodyState extends State<SearchBody>
         : _animationController.reverse();
   }
 
+  updateComparison(String next) {
+    setState(() {
+      if (_animationController.isDismissed) _animationController.forward();
+      a = b;
+      b = next;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
-    final double infoBoxSize = 300.0; //InfoBox Height
     return AnimatedBuilder(
       animation: _animationController,
       builder: (context, child) {
-        double slide = infoBoxSize * _animationController.value;
+        double slide = compareBoxSize * _animationController.value;
         VecMath.Vector3 down = VecMath.Vector3(0.0, 1.0, 0.0);
 
         return Transform(
           transform: Matrix4.identity()..translate(down * slide),
           child: Transform.translate(
-            offset: Offset(0.0, -infoBoxSize),
+            offset: Offset(0.0, -compareBoxSize),
             child: Column(
               children: [
-                Container(
-                  height: infoBoxSize,
-                  decoration: BoxDecoration(
-                    color: Colors.blue,
-                  ),
-                ),
+                compareBox(a, b),
                 infoBox("Server Type A"),
-                infoBox("Server Type A"),
-                infoBox("Server Type A"),
-                infoBox("Server Type A"),
+                infoBox("Server Type B"),
+                infoBox("Server Type C"),
+                infoBox("Server Type D"),
               ],
             ),
           ),
         );
       },
+    );
+  }
+
+  Widget compareBox(String a, String b) {
+    return Container(
+      height: compareBoxSize,
+      child: Row(
+        children: [
+          Expanded(
+            child: CustomCard(
+              child: Text(a),
+            ),
+          ),
+          Expanded(
+            child: CustomCard(
+              child: Text(b),
+            ),
+          ),
+        ],
+      ),
+      decoration: BoxDecoration(
+        color: ThemeColors.greyLight,
+      ),
     );
   }
 
@@ -99,7 +130,9 @@ class _SearchBodyState extends State<SearchBody>
               Text(text),
               IconButton(
                 icon: Icon(Icons.add),
-                onPressed: () => {},
+                onPressed: () {
+                  updateComparison(text);
+                },
               ),
             ],
           ),

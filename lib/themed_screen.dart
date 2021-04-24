@@ -1,6 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
+import 'diamond_styles.dart';
+
 class ThemedScreen extends StatelessWidget {
   const ThemedScreen({
     this.appBarLeading,
@@ -22,15 +24,13 @@ class ThemedScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final Color bkgdColor = Colors.orange.shade50;
-    final Color textColor = Colors.black;
     return Scaffold(
-      backgroundColor: bkgdColor,
+      backgroundColor: ThemeColors.primaryLight,
       appBar: AppBar(
         elevation: 0.0,
-        backgroundColor: bkgdColor,
+        backgroundColor: ThemeColors.primaryLight,
         iconTheme: IconThemeData(
-          color: textColor,
+          color: ThemeColors.black,
         ),
         leading: appBarLeading,
         title: appBarTitle,
