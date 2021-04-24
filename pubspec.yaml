@@ -77,4 +77,4 @@ flutter:
   fonts:
     - family: SF Pro Display
       fonts:
-        - asset: build/flutter_assets/fonts/SFProDisplay-Regular.ttf
+        - asset: fonts/SFProDisplay-Regular.ttf
