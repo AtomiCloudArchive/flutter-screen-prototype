@@ -2,6 +2,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import 'card.dart';
+import 'login_screen.dart';
+import 'teams_screen.dart';
 import 'notif_screen.dart';
 import 'search_screen.dart';
 import 'profile_screen.dart';
@@ -13,19 +15,6 @@ void main() {
     title: 'Navigation Basics',
     home: LoginScreen(),
   ));
-}
-
-class LoginScreen extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return ThemedScreen(
-      floatingActionButton: IconButton(
-        icon: Icon(Icons.ac_unit),
-        onPressed: () => Navigator.of(context)
-            .push(MaterialPageRoute(builder: (context) => MyApp())),
-      ),
-    );
-  }
 }
 
 class MyApp extends StatefulWidget {
@@ -102,7 +91,7 @@ class _MyAppState extends State<MyApp> with SingleTickerProviderStateMixin {
                             ),
                             onPressed: () {
                               Navigator.of(context).push(MaterialPageRoute(
-                                builder: (context) => ThemedScreen(),
+                                builder: (context) => TeamsScreen(),
                               ));
                             },
                             child: Text(
@@ -192,8 +181,11 @@ class _MyAppState extends State<MyApp> with SingleTickerProviderStateMixin {
         child: Column(
           children: [
             Expanded(
-              child: CustomCard(
-                child: Text("Hot reload supported"),
+              child: TextButton(
+                child: CustomCard(
+                  child: Text("Hot reload supported"),
+                ),
+                onPressed: () => Navigator.pop(context),
               ),
             ),
             Expanded(

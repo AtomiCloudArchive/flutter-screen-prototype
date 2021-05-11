@@ -30,9 +30,13 @@ class NotifTray extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      child: NotifCard(),
-      //NotifCard(),
-      //NotifCard(),
+      child: Column(
+        children: [
+          NotifCard(),
+          NotifCard(),
+          NotifCard(),
+        ],
+      ),
     );
   }
 }
