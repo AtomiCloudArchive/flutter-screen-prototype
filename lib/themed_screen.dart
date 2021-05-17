@@ -24,9 +24,11 @@ class ThemedScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: ThemeColors.primaryLight,
-      appBar: AppBar(
+    PreferredSizeWidget? hasAppBar;
+    if (appBarLeading == null && appBarTitle == null && appBarActions == null) {
+      hasAppBar = null;
+    } else {
+      hasAppBar = AppBar(
         elevation: 0.0,
         backgroundColor: ThemeColors.primaryLight,
         iconTheme: IconThemeData(
@@ -35,7 +37,11 @@ class ThemedScreen extends StatelessWidget {
         leading: appBarLeading,
         title: appBarTitle,
         actions: appBarActions,
-      ),
+      );
+    }
+    return Scaffold(
+      backgroundColor: ThemeColors.primaryLight,
+      appBar: hasAppBar,
       body: this.body,
       floatingActionButton: this.floatingActionButton,
     );
